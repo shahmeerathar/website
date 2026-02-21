@@ -42,6 +42,8 @@ const mapPins: MapPinView[] = locations
   })
   .sort((a, b) => a.name.localeCompare(b.name));
 
+
+
 export function getAllLocations(): Location[] {
   return [...locations];
 }
