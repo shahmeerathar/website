@@ -9,12 +9,12 @@
 - [x] Task 4: Build Borderless World Map Renderer
 - [x] Task 5: Implement Pin Interactions and URL Query Sync
 - [x] Task 6: Build Gallery Panel and Responsive Photo Grid
+- [x] Task 7: Add Static Location and About Pages
 
 ### In Progress Tasks
 - None
 
 ### Pending Tasks
-- [ ] Task 7: Add Static Location and About Pages
 - [ ] Task 8: Optimize Image Pipeline and Loading Behavior
 - [ ] Task 9: Complete Accessibility Pass
 - [ ] Task 10: SEO and Machine-Readable Outputs
@@ -38,5 +38,10 @@
 - Mobile bottom sheet (72vh max, 680px)
 - 2-column grid on mobile, 3-column on tablet+
 - Event-driven gallery updates via CustomEvents
+- Static location pages generated for all 5 locations
+- About page with bio and contact/social links added
+- SeoHead component for proper meta tags and canonical URLs
+- 404 page for invalid routes
+- All 8 static pages render correctly (index, about, 404, 5 locations)
 - All verification commands passing
-- Ready for Task 7
+- Ready for Task 8
