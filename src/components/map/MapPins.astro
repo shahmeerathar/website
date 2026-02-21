@@ -25,9 +25,11 @@ const initialActiveSlug = mapPins.find((pin) => pin.slug === initialSlug)?.slug 
           data-slug={pin.slug}
           tabindex="0"
           role="button"
+          aria-controls="gallery-panel"
           aria-label={`View photos from ${pin.name} (${pin.photoCount} photos)`}
           aria-pressed={pin.slug === initialActiveSlug}
         >
+          <circle class="map-pin--target" cx={cx} cy={cy} r="22" />
           <circle class="map-pin--halo" cx={cx} cy={cy} r="14" />
           <circle class="map-pin--pin" cx={cx} cy={cy} r="6" />
           <circle class="map-pin--dot" cx={cx} cy={cy} r="2.5" />
@@ -42,9 +44,13 @@ const initialActiveSlug = mapPins.find((pin) => pin.slug === initialSlug)?.slug 
     cursor: pointer;
   }
 
-  .map-pin-group:focus {
+  .map-pin-group:focus-visible {
     outline: 2px solid var(--color-pin-focus);
     outline-offset: 4px;
+  }
+
+  .map-pin--target {
+    fill: transparent;
   }
 
   .map-pin--halo {

@@ -42,6 +42,7 @@ a {
   color: var(--color-accent);
   text-decoration: none;
   transition: opacity var(--duration-fast) var(--easing);
+  min-block-size: 44px;
 }
 
 a:hover {
@@ -67,6 +68,19 @@ button {
   background: none;
   border: none;
   cursor: pointer;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+}
+
+[role="button"] {
+  min-inline-size: 44px;
+  min-block-size: 44px;
+}
+
+[role="button"]:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: var(--space-1);
+  border-radius: var(--radius-focus);
 }
 
 button:focus-visible {
