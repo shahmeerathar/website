@@ -81,6 +81,12 @@ Examples:
 - Do not rewrite merge history.
 - After a PR merges, checkout main and create a new branch for the next task.
 
+### PR Merge Protocol (CRITICAL)
+- **NEVER merge a PR yourself.**
+- After creating a PR, wait for user review and approval.
+- Only merge if the user explicitly instructs you to do so.
+- If you accidentally merge a PR, immediately revert it and re-open for review.
+
 ## 9. Required Verification Commands
 Run these at each milestone and before final PR:
 
