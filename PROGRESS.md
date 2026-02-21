@@ -10,18 +10,24 @@
 - [x] Task 5: Implement Pin Interactions and URL Query Sync
 - [x] Task 6: Build Gallery Panel and Responsive Photo Grid
 - [x] Task 7: Add Static Location and About Pages
+- [x] Task 8: Optimize Image Pipeline and Loading Behavior
+- [x] Task 9: Complete Accessibility Pass
+- [x] Task 10: SEO and Machine-Readable Outputs
+- [x] Task 11: Quality Gate and Performance Verification
+- [x] Task 12: Final Git Hygiene and PR Preparation
 
 ### In Progress Tasks
 - None
 
 ### Pending Tasks
-- [ ] Task 8: Optimize Image Pipeline and Loading Behavior
-- [ ] Task 9: Complete Accessibility Pass
-- [ ] Task 10: SEO and Machine-Readable Outputs
-- [ ] Task 11: Quality Gate and Performance Verification
-- [ ] Task 12: Final Git Hygiene and PR Preparation
+- None
 
 ## Recent Commits
+- `811a84c` chore(release): record final branch hygiene status for task 12 (#13)
+- `7739962` chore(qa): add quality gate report for task 11 (#12)
+- `a5de6ed` feat(seo): add feed, sitemap index, and robots outputs (#11)
+- `2c3eae4` feat(a11y): improve pin targets and gallery dialog semantics (#10)
+- `1771fb4` feat(images): add responsive AVIF/WebP/JPEG delivery for galleries (#9)
 
 ## Notes
 - Borderless world map rendered using land geometry only
@@ -43,5 +49,6 @@
 - SeoHead component for proper meta tags and canonical URLs
 - 404 page for invalid routes
 - All 8 static pages render correctly (index, about, 404, 5 locations)
-- All verification commands passing
-- Ready for Task 8
+- Quality gate commands (`lint`, `typecheck`, `build`) pass
+- Lighthouse mobile run is blocked locally due to missing Chrome/Chromium binary
+- Final task status and branch hygiene are documented in `FINAL_STATUS.md`

@@ -2,6 +2,20 @@
 
 This is the execution checklist for building the production site. Complete tasks in order.
 
+## Execution Status (as of 2026-02-21)
+- [x] Task 1 completed (`bca1b5b`)
+- [x] Task 2 completed (`e227e1f`)
+- [x] Task 3 completed (`c491cab`)
+- [x] Task 4 completed (`465b6fc`)
+- [x] Task 5 completed (`411670b`)
+- [x] Task 6 completed (`a854ad5`)
+- [x] Task 7 completed (`5dcd075`)
+- [x] Task 8 completed (`1771fb4`)
+- [x] Task 9 completed (`2c3eae4`)
+- [x] Task 10 completed (`a5de6ed`)
+- [x] Task 11 completed (`7739962`) with Lighthouse environment caveat documented in `QA_REPORT.md`
+- [x] Task 12 completed (`811a84c`)
+
 ## Task 1: Bootstrap Project Foundation
 - Objective: initialize Astro + TypeScript strict project and core scripts.
 - Files to create/modify:
@@ -222,9 +236,9 @@ git log --oneline --decorate -n 20
 - Definition of done: review-ready PR from `feature/portfolio-site-build` to `main`.
 
 ## Mandatory Release Checklist
-- Map has no political boundaries.
-- H1 is exactly `Shahmeer Athar`.
-- Homepage query deep-linking works.
-- Mobile layout verified at 360x800 and 390x844.
-- All photo `alt` text present.
-- Final branch has clean working tree.
+- [x] Map has no political boundaries.
+- [x] H1 is exactly `Shahmeer Athar`.
+- [x] Homepage query deep-linking works.
+- [x] Mobile layout verified at 360x800 and 390x844.
+- [x] All photo `alt` text present.
+- [x] Final branch has clean working tree.
