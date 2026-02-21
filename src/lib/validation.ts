@@ -1,4 +1,6 @@
 import type { Location, Photo } from '../types/content';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -129,6 +131,8 @@ export function validateLocations(locations: Location[], photoIds: Set<string>):
 export function validatePhotos(photos: Photo[], locationSlugs: Set<string>): void {
   const ids = new Set<string>();
   const allErrors: string[] = [];
+  const imageDir = join(process.cwd(), 'public', 'images', 'photos');
+  const imageDirExists = existsSync(imageDir);
 
   for (const photo of photos) {
     if (ids.has(photo.id)) {
@@ -144,6 +148,11 @@ export function validatePhotos(photos: Photo[], locationSlugs: Set<string>): voi
 
     if (photo.src.startsWith('..') || photo.src.startsWith('/')) {
       allErrors.push(`Photo "${photo.id}" src "${photo.src}" must not use absolute or parent-relative paths`);
+    } else {
+      const imagePath = join(imageDir, photo.src);
+      if (!imageDirExists || !existsSync(imagePath)) {
+        allErrors.push(`Photo "${photo.id}" src "${photo.src}" does not exist in public/images/photos/`);
+      }
     }
   }
 
