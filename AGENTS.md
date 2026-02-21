@@ -79,6 +79,7 @@ Examples:
 - Keep PR focused; do not bundle unrelated changes.
 - Do not force-push after review begins unless explicitly requested.
 - Do not rewrite merge history.
+- After a PR merges, checkout main and create a new branch for the next task.
 
 ## 9. Required Verification Commands
 Run these at each milestone and before final PR:
