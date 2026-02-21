@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import WorldMap from '../components/map/WorldMap.astro';
+import GalleryPanel from '../components/gallery/GalleryPanel.astro';
 import '../lib/data';
 ---
 
@@ -21,6 +22,8 @@ import '../lib/data';
   </main>
 
   <SiteFooter />
+
+  <GalleryPanel />
 </BaseLayout>
 
 <style>
@@ -88,3 +91,152 @@ import '../lib/data';
     height: 100%;
   }
 </style>
+
+<script>
+
+  import { getLocationBySlug, getPhotosByLocation } from '../lib/data';
+  import type { Photo } from '../types/content';
+
+  const galleryPanel = document.getElementById('gallery-panel') as HTMLElement;
+  const closeButton = document.getElementById('gallery-panel-close') as HTMLButtonElement;
+  const photosContainer = document.getElementById('gallery-panel-photos') as HTMLElement;
+
+  async function loadPhotoGrid(photos: Photo[]) {
+    if (!photosContainer) return;
+
+    if (photos.length === 0) {
+      photosContainer.innerHTML = '<p class="photo-grid__empty">No photos available yet.</p>';
+      return;
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'photo-grid';
+
+    photos.forEach((photo) => {
+      const card = document.createElement('figure');
+      card.className = 'photo-card';
+
+      const img = document.createElement('img');
+      img.src = `/images/photos/${photo.src}`;
+      img.alt = photo.alt;
+      img.width = photo.width;
+      img.height = photo.height;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.className = 'photo-card__image';
+
+      const caption = document.createElement('figcaption');
+      caption.className = 'photo-card__caption';
+      caption.textContent = photo.alt;
+
+      card.appendChild(img);
+      card.appendChild(caption);
+      grid.appendChild(card);
+    });
+
+    photosContainer.appendChild(grid);
+
+    const style = document.createElement('style');
+    style.textContent = `
+      .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-2);
+      }
+      @media (min-width: 768px) {
+        .photo-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .photo-grid__empty {
+        color: var(--color-text-muted);
+        font-size: var(--fs-300);
+        text-align: center;
+        padding: var(--space-4);
+        margin: 0;
+      }
+      .photo-card {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .photo-card__image {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 3 / 2;
+        object-fit: cover;
+        border-radius: var(--radius-card);
+        background: var(--color-surface);
+      }
+      .photo-card__caption {
+        margin-top: var(--space-2);
+        font-size: var(--fs-300);
+        color: var(--color-text-secondary);
+        line-height: var(--lh-body);
+      }
+    `;
+    galleryPanel?.appendChild(style);
+  }
+
+  function updateGalleryPanel(slug: string | null) {
+    const titleEl = galleryPanel?.querySelector('[data-field="title"]') as HTMLElement;
+    const coordsEl = galleryPanel?.querySelector('[data-field="coordinates"]') as HTMLElement;
+    const countEl = galleryPanel?.querySelector('[data-field="count"]') as HTMLElement;
+    const descEl = galleryPanel?.querySelector('[data-field="description"]') as HTMLElement;
+
+    if (photosContainer) photosContainer.innerHTML = '';
+
+    if (!slug) {
+      galleryPanel?.classList.remove('gallery-panel--open');
+      galleryPanel?.setAttribute('aria-hidden', 'true');
+      return;
+    }
+
+    const location = getLocationBySlug(slug);
+    if (!location) return;
+
+    const photos = getPhotosByLocation(slug);
+
+    if (titleEl) titleEl.textContent = location.name;
+    if (coordsEl) coordsEl.textContent = `${location.lat.toFixed(2)}°N, ${location.lng.toFixed(2)}°E`;
+    if (countEl) countEl.textContent = `${photos.length} ${photos.length === 1 ? 'photo' : 'photos'}`;
+    if (descEl) descEl.textContent = location.description;
+
+    loadPhotoGrid(photos);
+
+    setTimeout(() => {
+      galleryPanel?.classList.add('gallery-panel--open');
+      galleryPanel?.setAttribute('aria-hidden', 'false');
+    }, 10);
+  }
+
+  function closeGallery() {
+    updateGalleryPanel(null);
+
+    const activePin = document.querySelector('.map-pin-group--active') as SVGGElement;
+    if (activePin) {
+      const slug = activePin.getAttribute('data-slug');
+      if (slug) {
+        activePin.classList.remove('map-pin-group--active');
+        activePin.setAttribute('aria-pressed', 'false');
+      }
+    }
+  }
+
+  closeButton?.addEventListener('click', closeGallery);
+
+  window.addEventListener('gallery:open', ((e: CustomEvent) => {
+    updateGalleryPanel(e.detail.slug);
+  }) as EventListener);
+
+  window.addEventListener('gallery:close', () => {
+    closeGallery();
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const locationSlug = params.get('location');
+
+  if (locationSlug) {
+    updateGalleryPanel(locationSlug);
+  }
+</script>
