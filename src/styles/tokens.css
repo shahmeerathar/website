@@ -1,0 +1,69 @@
+:root {
+  --color-bg: #090b0d;
+  --color-surface: #12161a;
+  --color-surface-elevated: #1a2026;
+  --color-text-primary: #f3f5f7;
+  --color-text-secondary: #a8b0b8;
+  --color-text-muted: #7d8791;
+  --color-accent: #8ec5ff;
+  --color-accent-strong: #5aa9ff;
+  --color-pin-default: #9fb0bf;
+  --color-pin-active: #8ec5ff;
+  --color-pin-focus: #d7ecff;
+  --color-border-subtle: #27313a;
+  --color-overlay: rgba(0, 0, 0, 0.62);
+
+  --font-heading: "Fraunces", "Iowan Old Style", "Times New Roman", serif;
+  --font-body: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", monospace;
+
+  --fs-900: clamp(2rem, 5vw, 4rem);
+  --fs-700: clamp(1.5rem, 3vw, 2.25rem);
+  --fs-500: 1.125rem;
+  --fs-400: 1rem;
+  --fs-300: 0.875rem;
+
+  --lh-heading: 1.15;
+  --lh-body: 1.55;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  --radius-card: 14px;
+  --radius-pill: 999px;
+  --radius-focus: 8px;
+
+  --max-width: 1200px;
+  --header-height: 64px;
+
+  --easing: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 140ms;
+  --duration-medium: 220ms;
+  --duration-slow: 360ms;
+
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  font-weight: 400 700;
+  font-display: swap;
+  src: local("Fraunces"), local("Iowan Old Style"), local("Times New Roman");
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-weight: 400 700;
+  font-display: swap;
+  src: local("Manrope"), local("Avenir Next"), local("Segoe UI");
+}

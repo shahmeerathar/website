@@ -1,0 +1,35 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <p class="site-footer__text">
+    © <span>{currentYear}</span> Shahmeer Athar
+  </p>
+</footer>
+
+<style>
+  .site-footer {
+    padding: var(--space-5) var(--space-4);
+    border-top: 1px solid var(--color-border-subtle);
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .site-footer {
+      padding: var(--space-5) var(--space-6);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer {
+      padding: var(--space-5) var(--space-7);
+    }
+  }
+
+  .site-footer__text {
+    font-size: var(--fs-300);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+</style>
