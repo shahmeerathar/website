@@ -1,0 +1,44 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogType?: string;
+  canonical?: string;
+}
+
+const {
+  title,
+  description,
+  ogTitle,
+  ogDescription,
+  ogImage,
+  ogType = 'website',
+  canonical
+} = Astro.props;
+
+const siteTitle = 'Shahmeer Athar';
+const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
+const finalOgTitle = ogTitle || fullTitle;
+const finalOgDescription = ogDescription || description;
+const finalCanonical = canonical || new URL(Astro.request.url).href;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={finalCanonical} />
+
+<meta property="og:title" content={finalOgTitle} />
+<meta property="og:description" content={finalOgDescription} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={finalCanonical} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={finalOgTitle} />
+<meta name="twitter:description" content={finalOgDescription} />
+{ogImage && <meta name="twitter:image" content={ogImage} />}

@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SeoHead from '../../components/seo/SeoHead.astro';
+import PhotoGrid from '../../components/gallery/PhotoGrid.astro';
+import { getLocationBySlug, getPhotosByLocation, getAllLocations } from '../../lib/data';
+
+export async function getStaticPaths() {
+  const locations = getAllLocations();
+  return locations.map((location) => ({
+    params: { slug: location.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const location = getLocationBySlug(slug || '');
+
+if (!location) {
+  return Astro.redirect('/404');
+}
+
+const photos = getPhotosByLocation(location.slug);
+const latDir = location.lat >= 0 ? 'N' : 'S';
+const lngDir = location.lng >= 0 ? 'E' : 'W';
+const coordinates = `${Math.abs(location.lat).toFixed(2)}°${latDir}, ${Math.abs(location.lng).toFixed(2)}°${lngDir}`;
+---
+
+<BaseLayout>
+  <SeoHead
+    title={location.name}
+    description={location.description}
+    canonical={`/location/${location.slug}`}
+  />
+
+  <main class="location-page">
+    <header class="location-header">
+      <nav class="location-breadcrumb">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">{location.name}</span>
+      </nav>
+      <h1 class="location-title">{location.name}</h1>
+      <div class="location-meta">
+        <span class="location-coordinates">{coordinates}</span>
+        <span class="location-separator">·</span>
+        <span class="location-count">{photos.length} {photos.length === 1 ? 'photo' : 'photos'}</span>
+      </div>
+    </header>
+
+    <section class="location-description">
+      <p>{location.description}</p>
+    </section>
+
+    <section class="location-gallery">
+      <PhotoGrid photos={photos} />
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .location-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .location-header {
+    margin-bottom: var(--space-8);
+  }
+
+  .location-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-300);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  .breadcrumb-link {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--easing);
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--color-accent);
+  }
+
+  .breadcrumb-separator {
+    color: var(--color-border-subtle);
+  }
+
+  .breadcrumb-current {
+    color: var(--color-text-secondary);
+  }
+
+  .location-title {
+    font-size: var(--fs-800);
+    font-weight: 700;
+    margin: 0 0 var(--space-3);
+    color: var(--color-text-primary);
+  }
+
+  .location-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-300);
+    color: var(--color-text-muted);
+  }
+
+  .location-coordinates {
+    color: var(--color-text-secondary);
+  }
+
+  .location-separator {
+    color: var(--color-border-subtle);
+  }
+
+  .location-count {
+    color: var(--color-text-secondary);
+  }
+
+  .location-description {
+    margin-bottom: var(--space-8);
+  }
+
+  .location-description p {
+    font-size: var(--fs-500);
+    color: var(--color-text-secondary);
+    line-height: var(--lh-body);
+    margin: 0;
+  }
+
+  .location-gallery {
+    margin-top: var(--space-8);
+  }
+
+  @media (max-width: 767px) {
+    .location-page {
+      padding: var(--space-6) var(--space-3);
+    }
+
+    .location-title {
+      font-size: var(--fs-700);
+    }
+
+    .location-description p {
+      font-size: var(--fs-400);
+    }
+  }
+</style>

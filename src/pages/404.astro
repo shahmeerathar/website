@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SeoHead from '../components/seo/SeoHead.astro';
+---
+
+<BaseLayout>
+  <SeoHead
+    title="404 - Not Found"
+    description="The page you're looking for doesn't exist."
+    canonical="/404"
+  />
+
+  <main class="not-found-page">
+    <section class="not-found-content">
+      <h1 class="not-found-title">404</h1>
+      <p class="not-found-text">The page you're looking for doesn't exist.</p>
+      <a href="/" class="not-found-link">Return Home</a>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found-page {
+    min-height: calc(100vh - var(--header-height));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+  }
+
+  .not-found-content {
+    text-align: center;
+    max-width: 400px;
+  }
+
+  .not-found-title {
+    font-size: clamp(4rem, 15vw, 8rem);
+    font-weight: 700;
+    margin: 0 0 var(--space-4);
+    color: var(--color-text-primary);
+    line-height: 1;
+  }
+
+  .not-found-text {
+    font-size: var(--fs-500);
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--space-6);
+  }
+
+  .not-found-link {
+    display: inline-block;
+    padding: var(--space-3) var(--space-6);
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    text-decoration: none;
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-400);
+    font-weight: 500;
+    transition: opacity var(--duration-fast) var(--easing);
+  }
+
+  .not-found-link:hover {
+    opacity: 0.8;
+  }
+
+  .not-found-link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 767px) {
+    .not-found-text {
+      font-size: var(--fs-400);
+    }
+  }
+</style>
