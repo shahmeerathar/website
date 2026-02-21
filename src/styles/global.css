@@ -82,3 +82,45 @@ button:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+}
+
+@media (min-width: 768px) {
+  .photo-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.photo-grid__empty {
+  color: var(--color-text-muted);
+  font-size: var(--fs-300);
+  text-align: center;
+  padding: var(--space-4);
+  margin: 0;
+}
+
+.photo-card {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-card__image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+
+.photo-card__caption {
+  margin-top: var(--space-2);
+  font-size: var(--fs-300);
+  color: var(--color-text-secondary);
+  line-height: var(--lh-body);
+}

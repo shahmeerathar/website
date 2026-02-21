@@ -8,12 +8,12 @@
 - [x] Task 3: Add Data Contracts and Validation Layer
 - [x] Task 4: Build Borderless World Map Renderer
 - [x] Task 5: Implement Pin Interactions and URL Query Sync
+- [x] Task 6: Build Gallery Panel and Responsive Photo Grid
 
 ### In Progress Tasks
 - None
 
 ### Pending Tasks
-- [ ] Task 6: Build Gallery Panel and Responsive Photo Grid
 - [ ] Task 7: Add Static Location and About Pages
 - [ ] Task 8: Optimize Image Pipeline and Loading Behavior
 - [ ] Task 9: Complete Accessibility Pass
@@ -33,5 +33,10 @@
 - Pin selection via click/tap/Enter/Space
 - URL updates with ?location=<slug>
 - Escape closes active panel and restores focus
+- Gallery panel with responsive photo grid implemented
+- Desktop right drawer (460px max, 38vw)
+- Mobile bottom sheet (72vh max, 680px)
+- 2-column grid on mobile, 3-column on tablet+
+- Event-driven gallery updates via CustomEvents
 - All verification commands passing
-- Ready for Task 6
+- Ready for Task 7

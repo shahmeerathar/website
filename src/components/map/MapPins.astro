@@ -131,6 +131,7 @@ const initialActiveSlug = mapPins.find((pin) => pin.slug === initialSlug)?.slug 
     });
     activeSlug = slug;
     syncLocationQuery(slug);
+    window.dispatchEvent(new CustomEvent('gallery:open', { detail: { slug } }));
   }
 
   function deactivatePin() {
@@ -140,6 +141,7 @@ const initialActiveSlug = mapPins.find((pin) => pin.slug === initialSlug)?.slug 
       activePin.setAttribute('aria-pressed', 'false');
       activeSlug = null;
       syncLocationQuery(null);
+      window.dispatchEvent(new CustomEvent('gallery:close'));
       activePin.focus();
     }
   }
@@ -174,11 +176,18 @@ const initialActiveSlug = mapPins.find((pin) => pin.slug === initialSlug)?.slug 
 
   if (pinsLayer) {
     const pins = pinsLayer.querySelectorAll('.map-pin-group');
-    pins.forEach((pin) => {
+    pins.forEach((pin: Element) => {
       pin.addEventListener('click', handlePinClick);
       pin.addEventListener('keydown', handlePinKeydown);
     });
 
     (window as Window).addEventListener('keydown', handleKeyDown);
+    window.addEventListener('map-pin:deactivate', deactivatePin);
+  }
+
+  if (activeSlug) {
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('gallery:open', { detail: { slug: activeSlug } }));
+    }, 100);
   }
 </script>

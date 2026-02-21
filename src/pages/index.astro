@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import WorldMap from '../components/map/WorldMap.astro';
+import GalleryPanel from '../components/gallery/GalleryPanel.astro';
 import '../lib/data';
 ---
 
@@ -21,6 +22,8 @@ import '../lib/data';
   </main>
 
   <SiteFooter />
+
+  <GalleryPanel />
 </BaseLayout>
 
 <style>
@@ -88,3 +91,107 @@ import '../lib/data';
     height: 100%;
   }
 </style>
+
+<script>
+
+  import { getLocationBySlug, getPhotosByLocation } from '../lib/data';
+  import type { Photo } from '../types/content';
+
+  const galleryPanel = document.getElementById('gallery-panel') as HTMLElement;
+  const closeButton = document.getElementById('gallery-panel-close') as HTMLButtonElement;
+  const photosContainer = document.getElementById('gallery-panel-photos') as HTMLElement;
+
+  async function loadPhotoGrid(photos: Photo[]) {
+    if (!photosContainer) return;
+
+    if (photos.length === 0) {
+      photosContainer.innerHTML = '<p class="photo-grid__empty">No photos available yet.</p>';
+      return;
+    }
+
+    const grid = document.createElement('div');
+    grid.className = 'photo-grid';
+
+    photos.forEach((photo) => {
+      const card = document.createElement('figure');
+      card.className = 'photo-card';
+
+      const img = document.createElement('img');
+      img.src = `/images/photos/${photo.src}`;
+      img.alt = photo.alt;
+      img.width = photo.width;
+      img.height = photo.height;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.className = 'photo-card__image';
+
+      const caption = document.createElement('figcaption');
+      caption.className = 'photo-card__caption';
+      caption.textContent = photo.alt;
+
+      card.appendChild(img);
+      card.appendChild(caption);
+      grid.appendChild(card);
+    });
+
+    photosContainer.appendChild(grid);
+  }
+
+  function updateGalleryPanel(slug: string | null) {
+    const titleEl = galleryPanel?.querySelector('[data-field="title"]') as HTMLElement;
+    const coordsEl = galleryPanel?.querySelector('[data-field="coordinates"]') as HTMLElement;
+    const countEl = galleryPanel?.querySelector('[data-field="count"]') as HTMLElement;
+    const descEl = galleryPanel?.querySelector('[data-field="description"]') as HTMLElement;
+
+    if (photosContainer) photosContainer.innerHTML = '';
+
+    if (!slug) {
+      galleryPanel?.classList.remove('gallery-panel--open');
+      galleryPanel?.setAttribute('aria-hidden', 'true');
+      return;
+    }
+
+    const location = getLocationBySlug(slug);
+    if (!location) return;
+
+    const photos = getPhotosByLocation(slug);
+
+    if (titleEl) titleEl.textContent = location.name;
+    if (coordsEl) {
+      const latDir = location.lat >= 0 ? 'N' : 'S';
+      const lngDir = location.lng >= 0 ? 'E' : 'W';
+      coordsEl.textContent = `${Math.abs(location.lat).toFixed(2)}°${latDir}, ${Math.abs(location.lng).toFixed(2)}°${lngDir}`;
+    }
+    if (countEl) countEl.textContent = `${photos.length} ${photos.length === 1 ? 'photo' : 'photos'}`;
+    if (descEl) descEl.textContent = location.description;
+
+    loadPhotoGrid(photos);
+
+    setTimeout(() => {
+      galleryPanel?.classList.add('gallery-panel--open');
+      galleryPanel?.setAttribute('aria-hidden', 'false');
+    }, 10);
+  }
+
+  function closeGallery() {
+    updateGalleryPanel(null);
+    window.dispatchEvent(new CustomEvent('map-pin:deactivate'));
+  }
+
+  closeButton?.addEventListener('click', closeGallery);
+
+  window.addEventListener('gallery:open', ((e: CustomEvent) => {
+    updateGalleryPanel(e.detail.slug);
+  }) as EventListener);
+
+  window.addEventListener('gallery:close', () => {
+    closeGallery();
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const locationSlug = params.get('location');
+
+  if (locationSlug) {
+    updateGalleryPanel(locationSlug);
+  }
+</script>
