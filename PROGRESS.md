@@ -10,7 +10,6 @@
 - None
 
 ### Pending Tasks
-- [ ] Task 2: Implement Design Tokens and Base Shell
 - [ ] Task 3: Add Data Contracts and Validation Layer
 - [ ] Task 4: Build Borderless World Map Renderer
 - [ ] Task 5: Implement Pin Interactions and URL Query Sync
