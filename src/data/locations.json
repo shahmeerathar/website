@@ -1,0 +1,52 @@
+[
+  {
+    "slug": "patagonia-torres-del-paine",
+    "name": "Torres del Paine",
+    "lat": -51.033,
+    "lng": -72.889,
+    "region": "Patagonia",
+    "country": "Chile",
+    "description": "Granite peaks rising above glacial lakes in Chilean Patagonia.",
+    "heroPhotoId": "patagonia-hero-001"
+  },
+  {
+    "slug": "iceland-vatnajokull",
+    "name": "Vatnajökull Glacier",
+    "lat": 64.433,
+    "lng": -16.450,
+    "region": "South Iceland",
+    "country": "Iceland",
+    "description": "Europe's largest glacier with dramatic ice caves and black sand beaches.",
+    "heroPhotoId": "iceland-hero-001"
+  },
+  {
+    "slug": "new-zealand-mount-cook",
+    "name": "Mount Cook",
+    "lat": -43.595,
+    "lng": 170.144,
+    "region": "South Island",
+    "country": "New Zealand",
+    "description": "New Zealand's highest peak surrounded by alpine lakes and tussock grasslands.",
+    "heroPhotoId": "nz-hero-001"
+  },
+  {
+    "slug": "norway-lofoten",
+    "name": "Lofoten Islands",
+    "lat": 68.217,
+    "lng": 14.567,
+    "region": "Nordland",
+    "country": "Norway",
+    "description": "Dramatic fishing villages and jagged mountains rising from the Arctic Ocean.",
+    "heroPhotoId": "norway-hero-001"
+  },
+  {
+    "slug": "yosemite-valley",
+    "name": "Yosemite Valley",
+    "lat": 37.745,
+    "lng": -119.533,
+    "region": "California",
+    "country": "United States",
+    "description": "Iconic granite domes and waterfalls in California's Sierra Nevada.",
+    "heroPhotoId": "yosemite-hero-001"
+  }
+]
