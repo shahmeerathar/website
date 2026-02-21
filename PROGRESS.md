@@ -7,12 +7,12 @@
 - [x] Task 2: Implement Design Tokens and Base Shell
 - [x] Task 3: Add Data Contracts and Validation Layer
 - [x] Task 4: Build Borderless World Map Renderer
+- [x] Task 5: Implement Pin Interactions and URL Query Sync
 
 ### In Progress Tasks
 - None
 
 ### Pending Tasks
-- [ ] Task 5: Implement Pin Interactions and URL Query Sync
 - [ ] Task 6: Build Gallery Panel and Responsive Photo Grid
 - [ ] Task 7: Add Static Location and About Pages
 - [ ] Task 8: Optimize Image Pipeline and Loading Behavior
@@ -29,5 +29,9 @@
 - Uses geoNaturalEarth1 projection for balanced global representation
 - SVG rendering for sharp vector output
 - Map heights: 42vh mobile, 50vh tablet, 60vh desktop
+- Interactive pins with query parameter sync implemented
+- Pin selection via click/tap/Enter/Space
+- URL updates with ?location=<slug>
+- Escape closes active panel and restores focus
 - All verification commands passing
-- Ready for Task 5
+- Ready for Task 6

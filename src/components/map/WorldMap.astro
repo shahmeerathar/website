@@ -3,6 +3,7 @@
 import { createMapProjection, generateSVGPath, getProjectedBounds } from './mapProjection';
 import { feature } from 'topojson-client';
 import worldLandData from '../../data/world-land-110m.json' with { type: 'json' };
+import MapPins from './MapPins.astro';
 
 const projection = createMapProjection();
 
@@ -25,29 +26,40 @@ const viewBoxHeight = (projectedBounds[1][1] - projectedBounds[0][1]) + (padding
 const viewBox = `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`;
 ---
 
-<svg
-  class="world-map"
-  viewBox={viewBox}
-  preserveAspectRatio="xMidYMid meet"
-  aria-label="World map showing land masses"
-  role="img"
->
-  <g class="world-map__land">
-    {
-      features.map((feature: any) => {
-        const path = generateSVGPath(feature, projection);
-        return path ? <path d={path} class="world-map__land-path"></path> : null;
-      })
-    }
-  </g>
-</svg>
+<div class="map-wrapper">
+  <svg
+    class="world-map"
+    viewBox={viewBox}
+    preserveAspectRatio="xMidYMid meet"
+    aria-label="World map showing land masses with location pins"
+    role="img"
+  >
+    <g class="world-map__land">
+      {
+        features.map((feature: any) => {
+          const path = generateSVGPath(feature, projection);
+          return path ? <path d={path} class="world-map__land-path"></path> : null;
+        })
+      }
+    </g>
+    <MapPins />
+  </svg>
+</div>
 
 <style>
-  .world-map {
-    display: block;
+  .map-wrapper {
+    position: relative;
     width: 100%;
     height: 100%;
     background: var(--color-bg);
+  }
+
+  .world-map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .world-map__land-path {

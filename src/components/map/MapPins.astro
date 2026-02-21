@@ -1,0 +1,184 @@
+---
+import { getMapPins } from '../../lib/data';
+import type { MapPinView } from '../../types/content';
+import { geoNaturalEarth1, type GeoProjection } from 'd3-geo';
+
+const projection: GeoProjection = geoNaturalEarth1()
+  .scale(130)
+  .translate([0, 0]);
+
+const mapPins: MapPinView[] = getMapPins();
+const initialSlug = new URL(Astro.request.url).searchParams.get('location') || '';
+const initialActiveSlug = mapPins.find((pin) => pin.slug === initialSlug)?.slug || '';
+---
+
+<g class="map-pins-layer" data-initial-active={initialActiveSlug}>
+  {
+    mapPins.map((pin: MapPinView) => {
+      const point = projection([pin.lng, pin.lat]);
+      if (!point) return null;
+
+      const [cx, cy] = point;
+      return (
+        <g
+          class={`map-pin-group ${pin.slug === initialActiveSlug ? 'map-pin-group--active' : ''}`}
+          data-slug={pin.slug}
+          tabindex="0"
+          role="button"
+          aria-label={`View photos from ${pin.name} (${pin.photoCount} photos)`}
+          aria-pressed={pin.slug === initialActiveSlug}
+        >
+          <circle class="map-pin--halo" cx={cx} cy={cy} r="14" />
+          <circle class="map-pin--pin" cx={cx} cy={cy} r="6" />
+          <circle class="map-pin--dot" cx={cx} cy={cy} r="2.5" />
+        </g>
+      );
+    })
+  }
+</g>
+
+<style>
+  .map-pin-group {
+    cursor: pointer;
+  }
+
+  .map-pin-group:focus {
+    outline: 2px solid var(--color-pin-focus);
+    outline-offset: 4px;
+  }
+
+  .map-pin--halo {
+    opacity: 0;
+    filter: blur(2px);
+    animation: none;
+  }
+
+  .map-pin-group--active .map-pin--halo {
+    opacity: 0.3;
+    animation: pulse 2s ease-in-out infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.3;
+    }
+    50% {
+      transform: scale(1.3);
+      opacity: 0.1;
+    }
+  }
+
+  .map-pin--pin {
+    fill: var(--color-pin-default);
+    stroke: var(--color-bg);
+    stroke-width: 2px;
+    transition:
+      r 0.15s ease,
+      fill 0.15s ease;
+  }
+
+  .map-pin-group--active .map-pin--pin {
+    r: 8px;
+    fill: var(--color-pin-active);
+  }
+
+  .map-pin-group:hover .map-pin--pin {
+    fill: var(--color-pin-focus);
+  }
+
+  .map-pin-group:hover.map-pin-group--active .map-pin--pin {
+    fill: var(--color-pin-active);
+  }
+
+  .map-pin--dot {
+    fill: var(--color-bg);
+    transition: r 0.15s ease;
+  }
+
+  .map-pin-group--active .map-pin--dot {
+    r: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .map-pin--halo {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { syncLocationQuery } from '../../lib/queryState';
+
+  const pinsLayer = document.querySelector('.map-pins-layer') as SVGGElement;
+  const initialActive = pinsLayer?.dataset.initialActive || '';
+
+  let activeSlug: string | null = initialActive || null;
+
+  function activatePin(slug: string) {
+    const pins = document.querySelectorAll('.map-pin-group');
+    pins.forEach((pin) => {
+      const pinSlug = pin.getAttribute('data-slug');
+      if (pinSlug === slug) {
+        pin.classList.add('map-pin-group--active');
+        pin.setAttribute('aria-pressed', 'true');
+      } else {
+        pin.classList.remove('map-pin-group--active');
+        pin.setAttribute('aria-pressed', 'false');
+      }
+    });
+    activeSlug = slug;
+    syncLocationQuery(slug);
+  }
+
+  function deactivatePin() {
+    const activePin = document.querySelector('.map-pin-group--active') as SVGGElement;
+    if (activePin) {
+      activePin.classList.remove('map-pin-group--active');
+      activePin.setAttribute('aria-pressed', 'false');
+      activeSlug = null;
+      syncLocationQuery(null);
+      activePin.focus();
+    }
+  }
+
+  function handlePinClick(event: Event) {
+    const pin = event.currentTarget as SVGGElement;
+    const slug = pin.getAttribute('data-slug');
+
+    if (!slug) return;
+
+    if (activeSlug === slug) {
+      deactivatePin();
+    } else {
+      activatePin(slug);
+    }
+  }
+
+  function handlePinKeydown(event: Event) {
+    const ke = event as KeyboardEvent;
+    if (ke.key === 'Enter' || ke.key === ' ') {
+      event.preventDefault();
+      handlePinClick(event);
+    }
+  }
+
+  function handleKeyDown(event: Event) {
+    const ke = event as KeyboardEvent;
+    if (ke.key === 'Escape' && activeSlug) {
+      deactivatePin();
+    }
+  }
+
+  if (pinsLayer) {
+    const pins = pinsLayer.querySelectorAll('.map-pin-group');
+    pins.forEach((pin) => {
+      pin.addEventListener('click', handlePinClick);
+      pin.addEventListener('keydown', handlePinKeydown);
+    });
+
+    (window as Window).addEventListener('keydown', handleKeyDown);
+  }
+</script>

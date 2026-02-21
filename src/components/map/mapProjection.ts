@@ -19,3 +19,8 @@ export function getProjectedBounds(featureCollection: any, projection: GeoProjec
   const pathGenerator = geoPath().projection(projection);
   return pathGenerator.bounds(featureCollection);
 }
+
+export function projectCoordinates(lat: number, lng: number, projection: GeoProjection): [number, number] {
+  const point = projection([lng, lat]);
+  return point || [0, 0];
+}
