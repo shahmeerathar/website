@@ -4,27 +4,62 @@ import type { Photo } from '../../types/content';
 export interface Props {
   photos: Photo[];
 }
+
+const { photos } = Astro.props;
+
+function getPhotoSrcset(baseName: string, ext: string) {
+  const sizes = [
+    { width: 360, suffix: '360w' },
+    { width: 720, suffix: '720w' },
+    { width: 960, suffix: '960w' },
+    { width: 1440, suffix: '1440w' }
+  ];
+  
+  return sizes.map((s) => `/images/photos/${baseName}-${s.suffix}.${ext} ${s.width}w`).join(', ');
+}
+
+function getPhotoFallbackSrc(baseName: string) {
+  return `/images/photos/${baseName}-720w.jpg`;
+}
+
+const photoWithSrc = (photo: Photo) => {
+  const baseName = photo.src.replace(/\.(jpg|jpeg|png)$/i, '');
+  return {
+    ...photo,
+    avifSrcset: getPhotoSrcset(baseName, 'avif'),
+    webpSrcset: getPhotoSrcset(baseName, 'webp'),
+    fallbackSrc: getPhotoFallbackSrc(baseName)
+  };
+};
 ---
 
 <div class="photo-grid">
   {
-    Astro.props.photos.length === 0 ? (
+    photos.length === 0 ? (
       <p class="photo-grid__empty">No photos available yet.</p>
     ) : (
-      Astro.props.photos.map((photo: Photo) => (
-        <figure class="photo-card">
-          <img
-            src={`/images/photos/${photo.src}`}
-            alt={photo.alt}
-            width={photo.width}
-            height={photo.height}
-            loading="lazy"
-            decoding="async"
-            class="photo-card__image"
-          />
-          <figcaption class="photo-card__caption">{photo.alt}</figcaption>
-        </figure>
-      ))
+      photos.map((photo: Photo, index: number) => {
+        const photoData = photoWithSrc(photo);
+        return (
+          <figure class="photo-card">
+            <picture class="photo-card__picture">
+              <source srcset={photoData.avifSrcset} type="image/avif" sizes="(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 23vw" />
+              <source srcset={photoData.webpSrcset} type="image/webp" sizes="(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 23vw" />
+              <img
+                src={photoData.fallbackSrc}
+                alt={photo.alt}
+                width={photo.width}
+                height={photo.height}
+                loading={index === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+                sizes="(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 23vw"
+                class="photo-card__image"
+              />
+            </picture>
+            <figcaption class="photo-card__caption">{photo.alt}</figcaption>
+          </figure>
+        );
+      })
     )
   }
 </div>
@@ -56,10 +91,14 @@ export interface Props {
     flex-direction: column;
   }
 
+  .photo-card__picture {
+    display: contents;
+  }
+
   .photo-card__image {
     width: 100%;
     height: auto;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 3/2;
     object-fit: cover;
     border-radius: var(--radius-card);
     background: var(--color-surface);

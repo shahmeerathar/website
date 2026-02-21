@@ -19,9 +19,18 @@ if (!location) {
 }
 
 const photos = getPhotosByLocation(location.slug);
+const heroPhoto = photos.find((photo) => photo.featured) ?? photos[0];
 const latDir = location.lat >= 0 ? 'N' : 'S';
 const lngDir = location.lng >= 0 ? 'E' : 'W';
 const coordinates = `${Math.abs(location.lat).toFixed(2)}°${latDir}, ${Math.abs(location.lng).toFixed(2)}°${lngDir}`;
+
+function getBaseName(src: string): string {
+  return src.replace(/\.(jpg|jpeg|png)$/i, '');
+}
+
+function buildSrcset(baseName: string, ext: string, widths: number[]): string {
+  return widths.map((width) => `/images/photos/${baseName}-${width}w.${ext} ${width}w`).join(', ');
+}
 ---
 
 <BaseLayout>
@@ -50,6 +59,35 @@ const coordinates = `${Math.abs(location.lat).toFixed(2)}°${latDir}, ${Math.abs
     <section class="location-description">
       <p>{location.description}</p>
     </section>
+
+    {
+      heroPhoto && (
+        <section class="location-hero">
+          <picture>
+            <source
+              srcset={buildSrcset(getBaseName(heroPhoto.src), 'avif', [960, 1440])}
+              type="image/avif"
+              sizes="(min-width: 1024px) 1200px, 100vw"
+            />
+            <source
+              srcset={buildSrcset(getBaseName(heroPhoto.src), 'webp', [960, 1440])}
+              type="image/webp"
+              sizes="(min-width: 1024px) 1200px, 100vw"
+            />
+            <img
+              src={`/images/photos/${getBaseName(heroPhoto.src)}-960w.jpg`}
+              alt={heroPhoto.alt}
+              width={heroPhoto.width}
+              height={heroPhoto.height}
+              loading="eager"
+              decoding="async"
+              sizes="(min-width: 1024px) 1200px, 100vw"
+              class="location-hero__image"
+            />
+          </picture>
+        </section>
+      )
+    }
 
     <section class="location-gallery">
       <PhotoGrid photos={photos} />
@@ -135,6 +173,18 @@ const coordinates = `${Math.abs(location.lat).toFixed(2)}°${latDir}, ${Math.abs
 
   .location-gallery {
     margin-top: var(--space-8);
+  }
+
+  .location-hero {
+    margin: 0 0 var(--space-8);
+  }
+
+  .location-hero__image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-card);
+    object-fit: cover;
+    background: var(--color-surface);
   }
 
   @media (max-width: 767px) {
