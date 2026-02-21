@@ -182,6 +182,7 @@ const initialActiveSlug = mapPins.find((pin) => pin.slug === initialSlug)?.slug 
     });
 
     (window as Window).addEventListener('keydown', handleKeyDown);
+    window.addEventListener('map-pin:deactivate', deactivatePin);
   }
 
   if (activeSlug) {

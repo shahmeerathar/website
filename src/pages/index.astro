@@ -135,47 +135,6 @@ import '../lib/data';
     });
 
     photosContainer.appendChild(grid);
-
-    const style = document.createElement('style');
-    style.textContent = `
-      .photo-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-2);
-      }
-      @media (min-width: 768px) {
-        .photo-grid {
-          grid-template-columns: repeat(3, 1fr);
-        }
-      }
-      .photo-grid__empty {
-        color: var(--color-text-muted);
-        font-size: var(--fs-300);
-        text-align: center;
-        padding: var(--space-4);
-        margin: 0;
-      }
-      .photo-card {
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-      }
-      .photo-card__image {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 3 / 2;
-        object-fit: cover;
-        border-radius: var(--radius-card);
-        background: var(--color-surface);
-      }
-      .photo-card__caption {
-        margin-top: var(--space-2);
-        font-size: var(--fs-300);
-        color: var(--color-text-secondary);
-        line-height: var(--lh-body);
-      }
-    `;
-    galleryPanel?.appendChild(style);
   }
 
   function updateGalleryPanel(slug: string | null) {
@@ -198,7 +157,11 @@ import '../lib/data';
     const photos = getPhotosByLocation(slug);
 
     if (titleEl) titleEl.textContent = location.name;
-    if (coordsEl) coordsEl.textContent = `${location.lat.toFixed(2)}°N, ${location.lng.toFixed(2)}°E`;
+    if (coordsEl) {
+      const latDir = location.lat >= 0 ? 'N' : 'S';
+      const lngDir = location.lng >= 0 ? 'E' : 'W';
+      coordsEl.textContent = `${Math.abs(location.lat).toFixed(2)}°${latDir}, ${Math.abs(location.lng).toFixed(2)}°${lngDir}`;
+    }
     if (countEl) countEl.textContent = `${photos.length} ${photos.length === 1 ? 'photo' : 'photos'}`;
     if (descEl) descEl.textContent = location.description;
 
@@ -212,15 +175,7 @@ import '../lib/data';
 
   function closeGallery() {
     updateGalleryPanel(null);
-
-    const activePin = document.querySelector('.map-pin-group--active') as SVGGElement;
-    if (activePin) {
-      const slug = activePin.getAttribute('data-slug');
-      if (slug) {
-        activePin.classList.remove('map-pin-group--active');
-        activePin.setAttribute('aria-pressed', 'false');
-      }
-    }
+    window.dispatchEvent(new CustomEvent('map-pin:deactivate'));
   }
 
   closeButton?.addEventListener('click', closeGallery);
