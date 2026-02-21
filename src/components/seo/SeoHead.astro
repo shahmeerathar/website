@@ -7,6 +7,7 @@ export interface Props {
   ogImage?: string;
   ogType?: string;
   canonical?: string;
+  siteUrl?: string;
 }
 
 const {
@@ -16,18 +17,25 @@ const {
   ogDescription,
   ogImage,
   ogType = 'website',
-  canonical
+  canonical,
+  siteUrl = Astro.site?.toString() || 'https://shahmeerathar.com'
 } = Astro.props;
 
 const siteTitle = 'Shahmeer Athar';
 const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
 const finalOgTitle = ogTitle || fullTitle;
 const finalOgDescription = ogDescription || description;
-const finalCanonical = canonical || new URL(Astro.request.url).href;
+
+const toAbsoluteUrl = (path: string) => {
+  if (path.startsWith('http')) return path;
+  const baseUrl = siteUrl.endsWith('/') ? siteUrl : `${siteUrl}/`;
+  const relativePath = path.startsWith('/') ? path.slice(1) : path;
+  return `${baseUrl}${relativePath}`;
+};
+
+const finalCanonical = canonical ? toAbsoluteUrl(canonical) : new URL(Astro.request.url).href;
 ---
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={finalCanonical} />
@@ -36,9 +44,9 @@ const finalCanonical = canonical || new URL(Astro.request.url).href;
 <meta property="og:description" content={finalOgDescription} />
 <meta property="og:type" content={ogType} />
 <meta property="og:url" content={finalCanonical} />
-{ogImage && <meta property="og:image" content={ogImage} />}
+{ogImage && <meta property="og:image" content={toAbsoluteUrl(ogImage)} />}
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={finalOgTitle} />
 <meta name="twitter:description" content={finalOgDescription} />
-{ogImage && <meta name="twitter:image" content={ogImage} />}
+{ogImage && <meta name="twitter:image" content={toAbsoluteUrl(ogImage)} />}

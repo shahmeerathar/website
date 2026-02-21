@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SeoHead from '../components/seo/SeoHead.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
 import WorldMap from '../components/map/WorldMap.astro';
@@ -8,6 +9,12 @@ import '../lib/data';
 ---
 
 <BaseLayout>
+  <SeoHead
+    title="Shahmeer Athar"
+    description="Landscape and travel photography portfolio by Shahmeer Athar"
+    canonical="/"
+    slot="head"
+  />
   <SiteHeader />
 
   <main class="site-main">

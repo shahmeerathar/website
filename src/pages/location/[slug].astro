@@ -29,6 +29,7 @@ const coordinates = `${Math.abs(location.lat).toFixed(2)}°${latDir}, ${Math.abs
     title={location.name}
     description={location.description}
     canonical={`/location/${location.slug}`}
+    slot="head"
   />
 
   <main class="location-page">

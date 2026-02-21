@@ -18,7 +18,9 @@
   --font-mono: "IBM Plex Mono", "SFMono-Regular", monospace;
 
   --fs-900: clamp(2rem, 5vw, 4rem);
+  --fs-800: clamp(1.75rem, 4vw, 3rem);
   --fs-700: clamp(1.5rem, 3vw, 2.25rem);
+  --fs-600: clamp(1.25rem, 2.5vw, 1.75rem);
   --fs-500: 1.125rem;
   --fs-400: 1rem;
   --fs-300: 0.875rem;
@@ -35,6 +37,7 @@
   --space-7: 48px;
   --space-8: 64px;
   --space-9: 96px;
+  --space-10: 128px;
 
   --radius-card: 14px;
   --radius-pill: 999px;
