@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
+import WorldMap from '../components/map/WorldMap.astro';
 import '../lib/data';
 ---
 
@@ -12,6 +13,10 @@ import '../lib/data';
     <section class="hero">
       <h1>Shahmeer Athar</h1>
       <p class="hero__subtitle">Landscape & Travel Photography</p>
+    </section>
+
+    <section class="map-section">
+      <WorldMap />
     </section>
   </main>
 
@@ -28,30 +33,58 @@ import '../lib/data';
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 60vh;
+    min-height: 30vh;
     text-align: center;
-    padding: var(--space-8) var(--space-4);
+    padding: var(--space-7) var(--space-4);
   }
 
   @media (min-width: 768px) {
     .hero {
-      padding: var(--space-9) var(--space-6);
+      min-height: 25vh;
+      padding: var(--space-8) var(--space-6);
     }
   }
 
   @media (min-width: 1024px) {
     .hero {
-      padding: var(--space-9) var(--space-7);
+      min-height: 20vh;
+      padding: var(--space-8) var(--space-7);
     }
   }
 
   .hero h1 {
-    margin: 0 0 var(--space-3);
+    margin: 0 0 var(--space-2);
   }
 
   .hero__subtitle {
     font-size: var(--fs-300);
     color: var(--color-text-secondary);
     margin: 0;
+  }
+
+  .map-section {
+    position: relative;
+    width: 100%;
+    height: 42vh;
+    background: radial-gradient(circle at 50% 50%, #0d1116 0%, #090b0d 100%);
+    border-top: 1px solid var(--color-border-subtle);
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  @media (min-width: 768px) {
+    .map-section {
+      height: 50vh;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .map-section {
+      height: 60vh;
+    }
+  }
+
+  .map-section :global(.world-map) {
+    width: 100%;
+    height: 100%;
   }
 </style>

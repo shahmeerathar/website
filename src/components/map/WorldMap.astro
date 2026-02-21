@@ -1,0 +1,60 @@
+---
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { createMapProjection, generateSVGPath } from './mapProjection';
+import { createViewBox } from '../../lib/map';
+import { feature } from 'topojson-client';
+import worldLandData from '../../data/world-land-110m.json' with { type: 'json' };
+
+const projection = createMapProjection();
+
+const topology = worldLandData;
+const landObject = worldLandData.objects.land;
+
+const landGeoJson = feature(topology as any, landObject as any);
+const features = Array.isArray(landGeoJson)
+  ? landGeoJson
+  : 'features' in landGeoJson
+    ? (landGeoJson as { features: any[] }).features
+    : [landGeoJson];
+
+const bounds = {
+  minLat: -90,
+  maxLat: 90,
+  minLng: -180,
+  maxLng: 180
+};
+
+const viewBox = createViewBox(bounds, 5);
+---
+
+<svg
+  class="world-map"
+  viewBox={viewBox}
+  preserveAspectRatio="xMidYMid meet"
+  aria-label="World map showing land masses"
+  role="img"
+>
+  <g class="world-map__land">
+    {
+      features.map((feature: any) => {
+        const path = generateSVGPath(feature, projection);
+        return path ? <path d={path} class="world-map__land-path"></path> : null;
+      })
+    }
+  </g>
+</svg>
+
+<style>
+  .world-map {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--color-bg);
+  }
+
+  .world-map__land-path {
+    fill: #151b21;
+    stroke: #2a3642;
+    stroke-width: 1px;
+  }
+</style>

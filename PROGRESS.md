@@ -6,12 +6,12 @@
 - [x] Task 1: Bootstrap Project Foundation
 - [x] Task 2: Implement Design Tokens and Base Shell
 - [x] Task 3: Add Data Contracts and Validation Layer
+- [x] Task 4: Build Borderless World Map Renderer
 
 ### In Progress Tasks
 - None
 
 ### Pending Tasks
-- [ ] Task 4: Build Borderless World Map Renderer
 - [ ] Task 5: Implement Pin Interactions and URL Query Sync
 - [ ] Task 6: Build Gallery Panel and Responsive Photo Grid
 - [ ] Task 7: Add Static Location and About Pages
@@ -24,10 +24,10 @@
 ## Recent Commits
 
 ## Notes
-- Data contracts defined for Location, Photo, and MapPinView
-- Schema validation with build-time error reporting
-- Sample data for 5 locations and 12 photos
-- Cross-reference validation between locations and photos
-- Data access helpers implemented and typed
+- Borderless world map rendered using land geometry only
+- No country or political boundaries present
+- Uses geoNaturalEarth1 projection for balanced global representation
+- SVG rendering for sharp vector output
+- Map heights: 42vh mobile, 50vh tablet, 60vh desktop
 - All verification commands passing
-- Ready for Task 4
+- Ready for Task 5
