@@ -1,7 +1,6 @@
 ---
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createMapProjection, generateSVGPath } from './mapProjection';
-import { createViewBox } from '../../lib/map';
+import { createMapProjection, generateSVGPath, getProjectedBounds } from './mapProjection';
 import { feature } from 'topojson-client';
 import worldLandData from '../../data/world-land-110m.json' with { type: 'json' };
 
@@ -17,20 +16,19 @@ const features = Array.isArray(landGeoJson)
     ? (landGeoJson as { features: any[] }).features
     : [landGeoJson];
 
-const bounds = {
-  minLat: -90,
-  maxLat: 90,
-  minLng: -180,
-  maxLng: 180
-};
-
-const viewBox = createViewBox(bounds, 5);
+const projectedBounds = getProjectedBounds(landGeoJson, projection);
+const padding = 15;
+const viewBoxX = projectedBounds[0][0] - padding;
+const viewBoxY = projectedBounds[0][1] - padding;
+const viewBoxWidth = (projectedBounds[1][0] - projectedBounds[0][0]) + (padding * 2);
+const viewBoxHeight = (projectedBounds[1][1] - projectedBounds[0][1]) + (padding * 2);
+const viewBox = `${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`;
 ---
 
 <svg
   class="world-map"
   viewBox={viewBox}
-  preserveAspectRatio="xMidYMid meet"
+  preserveAspectRatio="xMidYMid slice"
   aria-label="World map showing land masses"
   role="img"
 >

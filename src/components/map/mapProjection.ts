@@ -14,3 +14,8 @@ export function generateSVGPath(
   const pathGenerator = geoPath().projection(projection);
   return pathGenerator(feature);
 }
+
+export function getProjectedBounds(featureCollection: any, projection: GeoProjection): [[number, number], [number, number]] {
+  const pathGenerator = geoPath().projection(projection);
+  return pathGenerator.bounds(featureCollection);
+}
