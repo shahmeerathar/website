@@ -16,8 +16,7 @@
         in {
           default = pkgs.mkShell {
             packages = with pkgs; [
-              nodejs_20
-              git
+              nodejs_24
             ];
           };
         });
