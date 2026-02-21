@@ -6,10 +6,12 @@ import photosData from '../data/photos.json' with { type: 'json' };
 const locations: Location[] = locationsData as unknown as Location[];
 const photos: Photo[] = photosData as unknown as Photo[];
 
-validatePhotos(photos);
 const photoIdSet = new Set(photos.map(p => p.id));
-
 validateLocations(locations, photoIdSet);
+
+const locationSlugs = new Set(locations.map(l => l.slug));
+validatePhotos(photos, locationSlugs);
+
 validateCrossReferences(locations, photos);
 
 const photosByLocation = new Map<string, Photo[]>();
