@@ -10,12 +10,23 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:astro/recommended'
   ],
-  parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module'
-  },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module'
+      }
+    },
+    {
+      files: ['src/env.d.ts'],
+      rules: {
+        '@typescript-eslint/triple-slash-reference': 'off'
+      }
+    }
+  ],
   rules: {
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/no-explicit-any': 'warn'
