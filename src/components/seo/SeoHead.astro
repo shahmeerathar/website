@@ -22,7 +22,7 @@ const {
 } = Astro.props;
 
 const siteTitle = 'Shahmeer Athar';
-const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
+const fullTitle = title.includes('|') ? title : `${title} | ${siteTitle}`;
 const finalOgTitle = ogTitle || fullTitle;
 const finalOgDescription = ogDescription || description;
 
