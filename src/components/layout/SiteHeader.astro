@@ -1,0 +1,62 @@
+---
+---
+
+<header class="site-header">
+  <a href="/" class="site-header__brand">Shahmeer Athar</a>
+  <nav class="site-header__nav">
+    <a href="/about" class="site-header__link">About</a>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-4);
+    background-color: rgba(9, 11, 13, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-border-subtle);
+    z-index: 100;
+  }
+
+  @media (min-width: 768px) {
+    .site-header {
+      padding: 0 var(--space-6);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-header {
+      padding: 0 var(--space-7);
+    }
+  }
+
+  .site-header__brand {
+    font-family: var(--font-heading);
+    font-size: var(--fs-500);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+
+  .site-header__nav {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .site-header__link {
+    font-size: var(--fs-300);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--easing);
+  }
+
+  .site-header__link:hover,
+  .site-header__link:focus {
+    color: var(--color-text-primary);
+  }
+</style>
